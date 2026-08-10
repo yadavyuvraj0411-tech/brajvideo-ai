@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrajVideo AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #94a3b8;
+      margin-bottom: 35px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 15px;
+      border-radius: 12px;
+      border: none;
+      resize: vertical;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: #7c3aed;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #6d28d9;
+    }
+
+    #status {
+      margin-top: 20px;
+      color: #c4b5fd;
+      text-align: center;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .feature {
+      background: #334155;
+      padding: 18px;
+      border-radius: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>🎬 BrajVideo AI</h1>
+
+    <div class="subtitle">
+      Create long AI-generated videos from a single idea
+    </div>
+
+    <div class="card">
+
+      <label for="prompt">Describe your video</label>
+
+      <textarea
+        id="prompt"
+        placeholder="Example: Create a 10-minute story about Bal Krishna playing with his friends near the Yamuna in Vrindavan..."
+      ></textarea>
+
+      <label for="language">Language</label>
+
+      <select id="language">
+        <option>Hindi</option>
+        <option>Brajbhasha</option>
+        <option>English</option>
+      </select>
+
+      <label for="duration">Video duration</label>
+
+      <select id="duration">
+        <option>5 minutes</option>
+        <option selected>10 minutes</option>
+        <option>12 minutes</option>
+      </select>
+
+      <button onclick="generateVideo()">
+        🎬 Generate Video
+      </button>
+
+      <div id="status"></div>
+
+    </div>
+
+    <div class="features">
+
+      <div class="feature">
+        📝<br>
+        AI Story
+      </div>
+
+      <div class="feature">
+        🎥<br>
+        AI Video
+      </div>
+
+      <div class="feature">
+        🎙️<br>
+        AI Voice
+      </div>
+
+      <div class="feature">
+        🎵<br>
+        Music
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function generateVideo() {
+
+      const prompt = document.getElementById("prompt").value;
+      const status = document.getElementById("status");
+
+      if (!prompt.trim()) {
+        status.innerText = "Please describe your video first.";
+        return;
+      }
+
+      status.innerText =
+        "🚧 Video engine is being connected. This interface is ready!";
+    }
+  </script>
+
+</body>
+</html>
