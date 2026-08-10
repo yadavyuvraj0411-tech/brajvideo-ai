@@ -1,5 +1,6 @@
+
 import os
-import time
+import requests
 from pathlib import Path
 
 
@@ -7,85 +8,71 @@ OUTPUT_DIR = Path("generated_videos")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
-def prepare_shot(shot_number, prompt, duration_seconds=8):
-    """
-    Prepare one video shot for the AI video engine.
-    """
+def get_api_url():
+    return os.environ.get("VIDEO_API_URL")
+
+
+def get_api_key():
+    return os.environ.get("VIDEO_API_KEY")
+
+
+def check_configuration():
+    api_url = get_api_url()
+    api_key = get_api_key()
+
+    if not api_url:
+        return {
+            "ready": False,
+            "message": "VIDEO_API_URL is not configured."
+        }
+
+    if not api_key:
+        return {
+            "ready": False,
+            "message": "VIDEO_API_KEY is not configured."
+        }
 
     return {
-        "shot_number": shot_number,
-        "prompt": prompt,
-        "duration_seconds": duration_seconds,
-        "status": "waiting"
+        "ready": True,
+        "message": "Video API configuration is ready."
     }
 
 
-def generate_shot(shot):
-    """
-    Placeholder for the real AI video model.
+def create_video_request(prompt):
+    api_url = get_api_url()
+    api_key = get_api_key()
 
-    The actual Wan/LTX/etc. model will be connected here.
-    """
-
-    print(f"Generating shot {shot['shot_number']}...")
-    print(f"Prompt: {shot['prompt']}")
-
-    # The actual GPU model will replace this section.
-    time.sleep(1)
-
-    filename = (
-        OUTPUT_DIR /
-        f"shot_{shot['shot_number']:04d}.mp4"
-    )
-
-    return {
-        "shot_number": shot["shot_number"],
-        "status": "ready",
-        "file": str(filename)
-    }
-
-
-def generate_video_from_shots(shots):
-    """
-    Process all shots sequentially.
-    """
-
-    results = []
-
-    total = len(shots)
-
-    for index, shot in enumerate(shots, start=1):
-
-        result = generate_shot(shot)
-
-        results.append(result)
-
-        progress = int((index / total) * 100)
-
-        print(
-            f"Progress: {progress}% "
-            f"({index}/{total})"
+    if not api_url or not api_key:
+        raise RuntimeError(
+            "Video API is not configured."
         )
 
-    return results
+    response = requests.post(
+        api_url,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        },
+        json={
+            "prompt": prompt
+        },
+        timeout=60
+    )
+
+    response.raise_for_status()
+
+    return response.json()
+
+
+def save_video(video_bytes, filename):
+    path = OUTPUT_DIR / filename
+
+    with open(path, "wb") as file:
+        file.write(video_bytes)
+
+    return str(path)
 
 
 if __name__ == "__main__":
-
-    example_shots = [
-        prepare_shot(
-            1,
-            "A cinematic morning view of Vrindavan beside the Yamuna.",
-            8
-        ),
-        prepare_shot(
-            2,
-            "Bal Krishna walking through Vrindavan with his friends.",
-            8
-        )
-    ]
-
-    results = generate_video_from_shots(example_shots)
-
-    print("\nGeneration finished:")
-    print(results)
+    print("BrajVideo AI video worker")
+    print(check_configuration())
