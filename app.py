@@ -27,12 +27,23 @@ class BrajVideoAPI(BaseHTTPRequestHandler):
     def do_GET(self):
 
         if self.path == "/":
-            self.send_json({
-                "name": "BrajVideo AI",
-                "status": "online",
-                "version": "0.1.0"
-            })
-            return
+    self.send_json({
+        "name": "BrajVideo AI",
+        "status": "online",
+        "version": "0.2.0",
+        "video_engine": "not connected"
+    })
+    return
+
+if self.path == "/health":
+    self.send_json({
+        "status": "healthy",
+        "planner": "ready",
+        "job_manager": "ready",
+        "video_worker": "ready",
+        "video_engine": "not connected"
+    })
+    return
 
         if self.path.startswith("/job/"):
             job_id = self.path.split("/job/")[1]
